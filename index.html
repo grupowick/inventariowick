@@ -61,7 +61,7 @@
   <div class="container">
     <h2><img src="https://i.postimg.cc/8cX1SHn1/C-9.png" alt="Inventário Grupo Wick" style="height: 100px;"></h2>
 	<h2>Inventário Grupo Wick</h2>
-    <input type="text" id="busca" placeholder="Digite a etiqueta ou local..." />
+    <input type="text" id="busca" placeholder="Digite a etiqueta, local ou item..." />
     <table id="tabela">
       <thead>
         <tr>
@@ -1086,8 +1086,9 @@
       tabela.innerHTML = "";
       dadosFiltrados.forEach(item => {
         if (
-          item.B.toLowerCase().includes(filtroMinusculo) ||
-          item.A.toLowerCase().includes(filtroMinusculo)
+          item.A.toLowerCase().includes(valorBusca) || 
+          item.B.toLowerCase().includes(valorBusca) ||
+          item.C.toLowerCase().includes(valorBusca)
         ) {
           const row = document.createElement("tr");
           row.innerHTML = `
