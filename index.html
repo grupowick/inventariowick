@@ -1072,41 +1072,34 @@
  }
     ];
 
-    const dadosFiltrados = dados.filter(item =>
-      item.A && item.B && item.C &&
-      item.B.toUpperCase() !== 'Nº' &&
-      item.C.toUpperCase() !== 'ITEM'
-    );
+   const dadosFiltrados = dados.filter(item => item.A !== "LOCAL" && item.B !== "Nº");
 
-    const tabela = document.querySelector("#tabela tbody");
-    const busca = document.getElementById("busca");
+  const tbody = document.querySelector("#tabela tbody");
 
-    function exibirTabela(filtro = "") {
-      const filtroMinusculo = filtro.toLowerCase();
-      tabela.innerHTML = "";
-      dadosFiltrados.forEach(item => {
-        if (
-          item.A.toLowerCase().includes(valorBusca) || 
-          item.B.toLowerCase().includes(valorBusca)
-        ) {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${item.A}</td>
-            <td>${item.B}</td>
-            <td>${item.C}</td>
-            <td>${item.D}</td>
-            <td>${item.E}</td>
-          `;
-          tabela.appendChild(row);
-        }
-      });
-    }
+  dadosFiltrados.forEach(item => {
+    const linha = document.createElement("tr");
 
-    busca.addEventListener("input", () => {
-      exibirTabela(busca.value);
+    linha.innerHTML = `
+      <td>${item.A}</td>
+      <td>${item.B}</td>
+      <td>${item.C}</td>
+      <td>${item.D}</td>
+      <td>${item.E}</td>
+    `;
+
+    tbody.appendChild(linha);
+  });
+
+  // Filtro ao digitar
+  const busca = document.getElementById("busca");
+  busca.addEventListener("input", () => {
+    const termo = busca.value.toLowerCase();
+    const linhas = tbody.querySelectorAll("tr");
+    linhas.forEach(linha => {
+      const texto = linha.textContent.toLowerCase();
+      linha.style.display = texto.includes(termo) ? "" : "none";
     });
-
-    exibirTabela();
-  </script>
+  });
+</script>
 </body>
 </html>
