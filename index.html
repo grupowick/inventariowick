@@ -1,1300 +1,326 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Inventário Grupo Wick</title>
-  <link rel="icon" href="https://i.postimg.cc/VvDfWkTS/MEU2-(26).png" type="image/png">
-
-  <style>
-    :root {
-      --roxo: #7b2ff7;
-      --rosa: #f107a3;
-      --laranja: #fe8a02;
-      --branco: #ffffff;
-      --glass: rgba(255,255,255,0.12);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      color: var(--branco);
-      background-image: url('https://i.postimg.cc/TYxjLcwk/COMERCIAL-VENDE-3.png');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      padding: 40px 20px;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      backdrop-filter: blur(10px);
-      background: linear-gradient(135deg, rgba(123,47,247,0.9), rgba(241,7,163,0.9));
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .header img {
-      height: 90px;
-      margin-bottom: 10px;
-    }
-
-    .header h2 {
-      margin: 0;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-
-    .search {
-      margin: 25px 0;
-    }
-
-    .search input {
-      width: 100%;
-      padding: 14px 18px;
-      font-size: 16px;
-      border-radius: 12px;
-      border: none;
-      outline: none;
-      background: var(--branco);
-      color: #333;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-
-    /* Abas */
-    .tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .tab {
-      padding: 10px 18px;
-      border-radius: 999px;
-      background: var(--glass);
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.25s ease;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    .tab:hover {
-      background: rgba(255,255,255,0.25);
-    }
-
-    .tab.active {
-      background: var(--laranja);
-      color: #000;
-      font-weight: 600;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      overflow: hidden;
-      border-radius: 14px;
-      background: var(--branco);
-      color: #333;
-    }
-
-    thead {
-      background: linear-gradient(135deg, var(--roxo), var(--rosa));
-      color: var(--branco);
-    }
-
-    th, td {
-      padding: 14px;
-      font-size: 14px;
-      text-align: left;
-    }
-
-    tbody tr:nth-child(even) {
-      background: #f4f4f7;
-    }
-
-    tbody tr:hover {
-      background: #ececff;
-    }
-
-    @media (max-width: 768px) {
-      th, td {
-        font-size: 13px;
-        padding: 10px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Inventário Moderno</title>
+	<link rel="icon" type="image/png" href="https://i.postimg.cc/kGF5y3N0/MEU2-(36).png">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <!-- Biblioteca de Ícones (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
+<body class="bg-gradient-to-br from-purple-300 via-pink-100 to-orange-300 dark:bg-gradient-to-br dark:from-slate-950 dark:via-purple-950/60 dark:to-orange-950/60 text-slate-900 dark:text-slate-100 font-sans antialiased min-h-screen flex flex-col items-center justify-center p-4 transition-colors duration-300">
 
-  <div class="container">
-    <div class="header">
-      <img src="https://i.postimg.cc/VvDfWkTS/MEU2-(26).png" alt="Inventário Grupo Wick">
-      <h2></h2>
+    <!-- ================= BOTÃO DE ALTERNÂNCIA DE TEMA (GLOBAL) ================= -->
+    <button onclick="toggleTheme()" class="absolute top-4 right-4 p-2.5 bg-white/80 dark:bg-slate-900/85 border border-purple-200 dark:border-slate-800 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 transition cursor-pointer shadow-sm backdrop-blur-sm" title="Alternar Modo Claro/Escuro">
+        <i id="theme-icon" data-lucide="sun" class="w-5 h-5"></i>
+    </button>
+
+    <!-- ================= TELA 1: LOGIN (COM A FOTO/LOGO) ================= -->
+    <div id="login-screen" class="w-full max-w-md p-8 bg-white/90 dark:bg-slate-900/90 border border-purple-200 dark:border-slate-800 rounded-2xl shadow-2xl text-center backdrop-blur-md transition-colors">
+        <div class="mb-6 flex flex-col items-center">
+            
+            <!-- AQUI É ONDE A FOTO/LOGOTIPO APARECE -->
+            <div class="w-32 h-25 mb-4 rounded-2xl overflow-hidden shadow-md border border-purple-200 dark:border-slate-700 bg-purple-50 dark:bg-slate-800 flex items-center justify-center">
+                <!-- Substitua o 'src' abaixo pelo link da sua foto/logo ou caminho do arquivo -->
+                <img src="https://i.postimg.cc/kGF5y3N0/MEU2-(36).png" alt="Logo da Aba" class="w-full h-full object-cover">
+            </div>
+
+            <h1 class="text-2xl font-bold tracking-tight">Controle de Inventário</h1>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Digite sua senha para acessar o sistema</p>
+        </div>
+        
+        <form onsubmit="handleLogin(event)" class="space-y-4">
+            <div>
+                <input type="password" id="password" placeholder="••••••••" required
+                    class="w-full px-4 py-3 bg-purple-50/50 dark:bg-slate-950/80 border border-purple-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-center text-xl tracking-widest placeholder:text-slate-400 dark:placeholder:text-slate-600 transition">
+            </div>
+            <button type="submit" 
+                class="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-medium rounded-xl transition shadow-lg shadow-purple-600/20 cursor-pointer">
+                Acessar Painel
+            </button>
+            <p id="error-msg" class="text-xs text-rose-500 hidden mt-2">Senha incorreta. Tente novamente.</p>
+        </form>
     </div>
 
-    <div class="search">
-      <input type="text" id="busca" placeholder="Pesquisar por etiqueta, item, marca ou cor…">
+    <!-- ================= TELA 2: SELEÇÃO DE ÁREAS (SETORES) ================= -->
+    <div id="dashboard-screen" class="hidden w-full max-w-5xl p-4">
+        <div class="mb-8 text-center">
+            <h2 class="text-3xl font-bold tracking-tight">Setores do Inventário</h2>
+            <p class="text-slate-700 dark:text-slate-300 mt-1">Selecione o setor que deseja consultar</p>
+        </div>
+
+        <!-- Grade Dinâmica de Setores -->
+        <div id="sectors-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Preenchido via JavaScript -->
+        </div>
     </div>
 
-    <div class="tabs" id="tabs"></div>
+    <!-- ================= TELA 3: LISTAGEM DOS ITENS DE INVENTÁRIO ================= -->
+    <div id="list-screen" class="hidden w-full max-w-6xl p-6 bg-white/90 dark:bg-slate-900/90 border border-purple-200 dark:border-slate-800 rounded-2xl shadow-2xl backdrop-blur-md transition-colors">
+        <!-- Cabeçalho da Lista com Botão de Voltar -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-6 border-b border-purple-100 dark:border-slate-800">
+            <div class="flex items-center gap-3">
+                <button onclick="goBackToDashboard()" class="p-2 bg-purple-50 dark:bg-slate-800 hover:bg-purple-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl transition cursor-pointer" title="Voltar para Setores">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div>
+                    <h2 id="list-title" class="text-2xl font-bold tracking-tight">Setor</h2>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">Itens patrimoniados cadastrados neste local</p>
+                </div>
+            </div>
+        </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Local/Área</th>
-          <th>Etiqueta</th>
-          <th>Item</th>
-          <th>Marca/Modelo</th>
-          <th>Cor</th>
-        </tr>
-      </thead>
-      <tbody id="tabela"></tbody>
-    </table>
-  </div>
+        <!-- Tabela Moderna de Inventário -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-purple-100 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider">
+                        <th class="py-3 px-4 font-semibold">Nº (Tombo)</th>
+                        <th class="py-3 px-4 font-semibold">Item</th>
+                        <th class="py-3 px-4 font-semibold">Marca / Modelo</th>
+                        <th class="py-3 px-4 font-semibold">Cor</th>
+                        <th class="py-3 px-4 font-semibold">Observações</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body" class="divide-y divide-purple-50 dark:divide-slate-800/60 text-sm text-slate-700 dark:text-slate-300">
+                    <!-- Preenchido via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-  <script>
-    const dados = 
-[
-  {
-   "A": "LOCAL",
-   "B": "Nº",
-   "C": "ITEM",
-   "D": "MARCA/MODELO",
-   "E": "COR",
-   "F": "OBSERVAÇÕES"
- },
- {
-   "A": "COMERCIAL",
-   "B": "0037",
-   "C": "ARMÁRIO DE ESCRITÓRIO 4 PORTAS ",
-   "D": "/",
-   "E": "CREME",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0038",
-   "C": "MESA DE ESCRITÓRIO 2 GAVETAS",
-   "D": "/",
-   "E": "BRANCO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0041",
-   "C": "TELA",
-   "D": "LENOVO",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0048",
-   "C": "CPU",
-   "D": "/",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0049",
-   "C": "MESA DE ESCRITÓRIO 4 LUGARES",
-   "D": "/",
-   "E": "CREME/CINZA ESCURO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0051",
-   "C": "MESA DE ESCRITÓRIO",
-   "D": "/",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0073",
-   "C": "NOTEBOOK",
-   "D": "ASUS - E1504FA - Nfe 003.169.601",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0074",
-   "C": "NOTEBOOK",
-   "D": "ASUS - E1504FA - Nfe 003.169.601",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0080",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0081",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0082",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0083",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0093",
-   "C": "SMARTPHONE",
-   "D": "SAMSUNG - A06 2024 - IMEI(353096467596806)",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0095",
-   "C": "SMARTPHONE",
-   "D": "SAMSUNG - A06 2024 - IMEI(352463774234292)",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0094",
-   "C": "SMARTPHONE",
-   "D": "SAMSUNG - A03 Core - IMEI(352081303267490)",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0096",
-   "C": "SMARTPHONE",
-   "D": "SAMSUNG - A03 Core - IMEI(352081303275022)",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0097",
-   "C": "SMARTPHONE",
-   "D": "SAMSUNG - A01 Core - IMEI(352898495018542)",
-   "E": "VERMELHO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0106",
-   "C": "SMARTPHONE",
-   "D": "SAMSUNG - A01 Core - IMEI(352898495026016)",
-   "E": "VERMELHO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0105",
-   "C": "SMARTPHONE",
-   "D": "SAMSUNG - A06 2024 - IMEI(353096467593019)",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0125",
-   "C": "ROTEADOR",
-   "D": "/",
-   "E": "BRANCO",
-   "F": ""
- },
- {
-   "A": "LOCAL",
-   "B": "Nº",
-   "C": "ITEM",
-   "D": "MARCA/MODELO",
-   "E": "COR",
-   "F": ""
- },
- {
-   "A": "COPA",
-   "B": "0104",
-   "C": "MICROONDAS ",
-   "D": "ELECTROLUX - ME23B/220V",
-   "E": "BRANCO",
-   "F": ""
- },
- {
-   "A": "COPA",
-   "B": "0060",
-   "C": "MICROONDAS ",
-   "D": "ELECTROLUX - ME23B/220V",
-   "E": "BRANCO",
-   "F": ""
- },
- {
-   "A": "COPA",
-   "B": "0061",
-   "C": "GELADEIRA",
-   "D": "CONSUL - CRB36ABBNA",
-   "E": "BRANCO",
-   "F": ""
- },
- {
-   "A": "COPA",
-   "B": "0063",
-   "C": "PURIFICADOR ",
-   "D": "SOFT PLUS EVEREST",
-   "E": "CINZA",
-   "F": ""
- },
- {
-   "A": "COPA",
-   "B": "0122",
-   "C": "INTERFONE",
-   "D": "INTELBRAS - IVR 4",
-   "E": "BRANCO",
-   "F": ""
- },
-	    {
-   "A": "LOCAL",
-   "B": "Nº",
-   "C": "ITEM",
-   "D": "MARCA/MODELO",
-   "E": "COR",
-   "F": ""
- },
- {
-   "A": "ENTRADA",
-   "B": "0124",
-   "C": "MOTOR DO PORTÃO",
-   "D": "PPA",
-   "E": "CINZA",
-   "F": ""
- },
- {
-   "A": "LOCAL",
-   "B": "Nº",
-   "C": "ITEM",
-   "D": "MARCA/MODELO",
-   "E": "COR",
-   "F": ""
- },
- {
-   "A": "ESTOQUE",
-   "B": "0021",
-   "C": "CPU",
-   "D": "HP",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "ESTOQUE",
-   "B": "0022",
-   "C": "TELA",
-   "D": "MGS",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "ESTOQUE",
-   "B": "0042",
-   "C": "CPU",
-   "D": "/",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "ESTOQUE",
-   "B": "0043",
-   "C": "NOTEBOOK",
-   "D": "LENOVO",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "ESTOQUE",
-   "B": "0040",
-   "C": "CPU",
-   "D": "/",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "ESTOQUE",
-   "B": "0117",
-   "C": "NOTEBOOK",
-   "D": "DELL - VOSTRO",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "LOCAL",
-   "B": "Nº",
-   "C": "ITEM",
-   "D": "MARCA/MODELO",
-   "E": "COR",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0025",
-   "C": "MESA DE ESCRITÓRIO 2 GAVETAS",
-   "D": "/",
-   "E": "BRANCO",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0026",
-   "C": "CPU",
-   "D": "C3TECH",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0027",
-   "C": "TELA",
-   "D": "AOC",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0029",
-   "C": "TELA ",
-   "D": "HAYOM",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0041",
-   "C": "TELA",
-   "D": "LENOVO - THINKVISION",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0030",
-   "C": "CPU",
-   "D": "C3TECH",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0031",
-   "C": "GAVETEIRO",
-   "D": "/",
-   "E": "CINZA",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0032",
-   "C": "IMPRESSORA",
-   "D": "EPSON/L3250",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0033",
-   "C": "TELA",
-   "D": "ACER 27'",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0034",
-   "C": "MESA DE ESCRITÓRIO 2 MÓDULOS",
-   "D": "/",
-   "E": "CINZA ESCURO/CINZA",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0036",
-   "C": "MESA DE ESCRITÓRIO 2 GAVETAS",
-   "D": "/",
-   "E": "BRANCO",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0085",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "AVANTTI",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0086",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "AVANTTI",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0087",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "AVANTTI",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0092",
-   "C": "SMARTPHONE",
-   "D": "SAMSUNG - A06 2024 - IMEI(353096468943064)",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0098",
-   "C": "SMARTPHONE",
-   "D": "SAMSUNG - A20S - IMEI(351840113434926)",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "FINANCEIRO",
-   "B": "0099",
-   "C": "SMARTPHONE",
-   "D": "SAMSUNG - A01 Core - IMEI(352898494756316",
-   "E": "PRETO",
-   "F": ""
- },
-	    {
-   "A": "FINANCEIRO",
-   "B": "0119",
-   "C": "PERSIANA",
-   "D": "EB LUX",
-   "E": "BRANCO",
-   "F": ""
- },
- {
-   "A": "LOCAL",
-   "B": "Nº",
-   "C": "ITEM",
-   "D": "MARCA/MODELO",
-   "E": "COR",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0008",
-   "C": "TELA",
-   "D": "AOC",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0009",
-   "C": "MESA DE ESCRITÓRIO",
-   "D": "/",
-   "E": "CINZA/CINZA ESCURO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0012",
-   "C": "TELA",
-   "D": "ACER 27'",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0019",
-   "C": "TELA",
-   "D": "ACER 23'",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0020",
-   "C": "CPU",
-   "D": "AURA",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0115",
-   "C": "NOBREAK",
-   "D": "SMS",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0114",
-   "C": "SWITCH",
-   "D": "CISCO - 24 PORTAS 100MB",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0113",
-   "C": "SERVIDOR/CPU ",
-   "D": "DELL - POWEREDGET320",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0109",
-   "C": "CABINE DO SERVIDOR",
-   "D": "/",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0111",
-   "C": "AR-CONDICIONADO",
-   "D": "PHILCO - INVERTER",
-   "E": "BRANCO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0110",
-   "C": "QUADRO MANDALA",
-   "D": "/",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0112",
-   "C": "PERSIANA",
-   "D": "EB LUX",
-   "E": "BRANCA",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0116",
-   "C": "DVR",
-   "D": "HIKVISION",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0108",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "CADEIRA SEM BRAÇO AMÉRICA FER",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0129",
-   "C": "NOTEBOOK",
-   "D": "ASUS - E1504FA - Nfe 003.273.736",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0069",
-   "C": "MESA DE CENTRO",
-   "D": "/",
-   "E": "BRANCO/PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0084",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "AVANTTI",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0088",
-   "C": "NOTEBOOK",
-   "D": "ASUS - E1504FA - Nfe 003.273.736",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0107",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "SEM MARCA/ENZO",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0126",
-   "C": "NOTEBOOK",
-   "D": "DELL",
-   "E": "CINZA CLARO",
-   "F": ""
- },
- {
-   "A": "HEAD/BKO/MKT",
-   "B": "0028",
-   "C": "TELA ",
-   "D": "AOC",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "LOCAL",
-   "B": "Nº",
-   "C": "ITEM",
-   "D": "MARCA/MODELO",
-   "E": "COR",
-   "F": ""
- },
- {
-   "A": "PROCESSOS",
-   "B": "0103",
-   "C": "SMARTPHONE",
-   "D": "SAMSUNG - A04e- IMEI(354188156559143)",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "LOCAL",
-   "B": "Nº",
-   "C": "ITEM",
-   "D": "MARCA/MODELO",
-   "E": "COR",
-   "F": ""
- },
- {
-   "A": "RECEPÇÃO",
-   "B": "0053",
-   "C": "CADEIRA DUPLA/2 LUGARES",
-   "D": "/",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "RECEPÇÃO",
-   "B": "0054",
-   "C": "MESA DE CENTRO RETANGULAR",
-   "D": "/",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "RECEPÇÃO",
-   "B": "0055",
-   "C": "POLTRONA",
-   "D": "/",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "RECEPÇÃO",
-   "B": "0056",
-   "C": "POLTRONA",
-   "D": "/",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "RECEPÇÃO",
-   "B": "0057",
-   "C": "SOFÁ 3 LUGARES",
-   "D": "/",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "RECEPÇÃO",
-   "B": "0090",
-   "C": "MARCADOR DE PONTO",
-   "D": "DIXI  - MODELO EVO 4",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "RECEPÇÃO",
-   "B": "0123",
-   "C": "ALARME DE SEGURANÇA",
-   "D": "INTELBRAS",
-   "E": "BRANCO/PRETO",
-   "F": ""
- },
- {
-   "A": "LOCAL",
-   "B": "Nº",
-   "C": "ITEM",
-   "D": "MARCA/MODELO",
-   "E": "COR",
-   "F": ""
- },
- {
-   "A": "RH",
-   "B": "0002",
-   "C": "ARMÁRIO 2 PORTAS",
-   "D": "/",
-   "E": "BRANCO",
-   "F": ""
- },
- {
-   "A": "LOCAL",
-   "B": "Nº",
-   "C": "ITEM",
-   "D": "MARCA/MODELO",
-   "E": "COR",
-   "F": ""
- },
- {
-   "A": "SALA DE REUNIÃO",
-   "B": "0059",
-   "C": "MESA GRANDE",
-   "D": "/",
-   "E": "BRANCO/CREME/MADEIRA",
-   "F": ""
- },
- {
-   "A": "SALA DE REUNIÃO",
-   "B": "0128",
-   "C": "AR-CONDICIONADO",
-   "D": "PHILCO - PAS9QT",
-   "E": "BRANCO",
-   "F": ""
- },
- {
-   "A": "LOCAL",
-   "B": "Nº",
-   "C": "ITEM",
-   "D": "MARCA/MODELO",
-   "E": "COR",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0001",
-   "C": "MESA REDONDA",
-   "D": "/",
-   "E": "CREME",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0003",
-   "C": "ARMÁRIO 2 PORTAS",
-   "D": "/",
-   "E": "CREME/CINZA ESCURO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0005",
-   "C": "CPU",
-   "D": "C3TECH",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0006",
-   "C": "TELA",
-   "D": "HAYOM",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0007",
-   "C": "ARMÁRIO 2 PORTAS C/ PRATELEIRA",
-   "D": "/",
-   "E": "CINZA/CINZA ESCURO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0010",
-   "C": "TELA POSITIVO",
-   "D": "/",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0013",
-   "C": "TELA",
-   "D": "HAYOM",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0014",
-   "C": "CPU",
-   "D": "/",
-   "E": "CINZA/VERMELHO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0016",
-   "C": "CPU",
-   "D": "C3TECH",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0017",
-   "C": "ESTABILIZADOR",
-   "D": "/",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0018",
-   "C": "TELA",
-   "D": "LG",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0024",
-   "C": "AR-CONDICIONADO",
-   "D": "SPRINGER - 42MACA2255",
-   "E": "BRANCA",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0041",
-   "C": "TELA",
-   "D": "LENOVO",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0071",
-   "C": "NOTEBOOK",
-   "D": "ASUS - RTL8821CE - Nfe 039.062.460",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0075",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0076",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0078",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0079",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0004",
-   "C": "BAIA INDIVIDUAL",
-   "D": "/",
-   "E": "CREME/PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0015",
-   "C": "ETIQUETADORA",
-   "D": "ELGIN",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0023",
-   "C": "MESA BAIA 4 LUGARES",
-   "D": "/",
-   "E": "BRANCA",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0050",
-   "C": "ARMÁRIO 2 NICHOS",
-   "D": "/",
-   "E": "CINZA/CREME",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0035",
-   "C": "AR-CONDICIONADO",
-   "D": "MAXIFLEX - 42AFCE09X5",
-   "E": "BRANCO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0045",
-   "C": "TELA",
-   "D": "AOC",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0044",
-   "C": "CPU",
-   "D": "C3TECH",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0039",
-   "C": "TELA",
-   "D": "SAMSUNG",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0047",
-   "C": "TELA",
-   "D": "LENOVO",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0100",
-   "C": "SMARTPHONE",
-   "D": "XIAOMI - REDMI 13C",
-   "E": "AZUL",
-   "F": ""
- },
- {
-   "A": "COMERCIAL",
-   "B": "0102",
-   "C": "SMARTPHONE",
-   "D": "SAMSUNG - A20S - IMEI(351840113434710)",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0118",
-   "C": "PERSIANA",
-   "D": "EB LUX",
-   "E": "BRANCA",
-   "F": ""
- },
- {
-   "A": "SAC/BKO/MKT",
-   "B": "0121",
-   "C": "INTERFONE",
-   "D": "INTELBRAS - IVR 4",
-   "E": "BRANCO",
-   "F": ""
- },
- {
-   "A": "LOCAL",
-   "B": "Nº",
-   "C": "ITEM",
-   "D": "MARCA/MODELO",
-   "E": "COR",
-   "F": ""
- },
- {
-   "A": "SALA CEO",
-   "B": "0058",
-   "C": "MESA DE CENTRO",
-   "D": "/",
-   "E": "BRANCA",
-   "F": ""
- },
- {
-   "A": "SALA CEO",
-   "B": "0065",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "/",
-   "E": "CINZA ESCURO",
-   "F": ""
- },
- {
-   "A": "SALA CEO",
-   "B": "0066",
-   "C": "MESA DE ESCRITÓRIO EM L",
-   "D": "/",
-   "E": "CINZA ESCURO",
-   "F": ""
- },
- {
-   "A": "SALA CEO",
-   "B": "0067",
-   "C": "POLTRONA PUFFER",
-   "D": "/",
-   "E": "CINZA CLARO",
-   "F": ""
- },
- {
-   "A": "SALA CEO",
-   "B": "0068",
-   "C": "CADEIRA DE ESCRITÓRIO",
-   "D": "/",
-   "E": "CINZA ESCURO",
-   "F": ""
- },
- {
-   "A": "SALA CEO",
-   "B": "0070",
-   "C": "POLTRONA PUFFER",
-   "D": "/",
-   "E": "CINZA CLARO",
-   "F": ""
- },
- {
-   "A": "SALA CEO",
-   "B": "0072",
-   "C": "QUADRO BICILETA AZUL",
-   "D": "/",
-   "E": "PRETO",
-   "F": ""
- },
- {
-   "A": "SALA CEO",
-   "B": "0120",
-   "C": "PERSIANA",
-   "D": "EB LUX",
-   "E": "BRANCO",
-   "F": ""
- }
-    ];
+    <!-- ================= SCRIPT DE CONTROLE E DADOS ================= -->
+    <script>
+        const rawData = [
+            {"A": "COMERCIAL", "B": "0037", "C": "ARMÁRIO DE ESCRITÓRIO 4 PORTAS ", "D": "/", "E": "CREME", "F": ""},
+            {"A": "COMERCIAL", "B": "0038", "C": "MESA DE ESCRITÓRIO 2 GAVETAS", "D": "/", "E": "BRANCO", "F": ""},
+            {"A": "COMERCIAL", "B": "0041", "C": "TELA", "D": "LENOVO", "E": "PRETO", "F": ""},
+            {"A": "COMERCIAL", "B": "0048", "C": "CPU", "D": "/", "E": "PRETO", "F": ""},
+            {"A": "COMERCIAL", "B": "0049", "C": "MESA DE ESCRITÓRIO 4 LUGARES", "D": "/", "E": "CREME/CINZA ESCURO", "F": ""},
+            {"A": "COMERCIAL", "B": "0051", "C": "MESA DE ESCRITÓRIO", "D": "/", "E": "PRETO", "F": ""},
+            {"A": "COMERCIAL", "B": "0073", "C": "NOTEBOOK", "D": "ASUS - E1504FA - Nfe 003.169.601", "E": "PRETO", "F": ""},
+            {"A": "COMERCIAL", "B": "0074", "C": "NOTEBOOK", "D": "ASUS - E1504FA - Nfe 003.169.601", "E": "PRETO", "F": ""},
+            {"A": "COMERCIAL", "B": "0080", "C": "CADEIRA DE ESCRITÓRIO", "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC", "E": "PRETO", "F": ""},
+            {"A": "COMERCIAL", "B": "0081", "C": "CADEIRA DE ESCRITÓRIO", "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC", "E": "PRETO", "F": ""},
+            {"A": "COMERCIAL", "B": "0082", "C": "CADEIRA DE ESCRITÓRIO", "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC", "E": "PRETO", "F": ""},
+            {"A": "COMERCIAL", "B": "0083", "C": "CADEIRA DE ESCRITÓRIO", "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0093", "C": "SMARTPHONE", "D": "SAMSUNG - A06 2024 - IMEI(353096467596806)", "E": "PRETO", "F": ""},
+            {"A": "COMERCIAL", "B": "0095", "C": "SMARTPHONE", "D": "SAMSUNG - A06 2024 - IMEI(352463774234292)", "E": "PRETO", "F": ""},
+            {"A": "COMERCIAL", "B": "0094", "C": "SMARTPHONE", "D": "SAMSUNG - A03 Core - IMEI(352081303267490)", "E": "PRETO", "F": ""},
+            {"A": "COMERCIAL", "B": "0096", "C": "SMARTPHONE", "D": "SAMSUNG - A03 Core - IMEI(352081303275022)", "E": "PRETO", "F": ""},
+            {"A": "COMERCIAL", "B": "0097", "C": "SMARTPHONE", "D": "SAMSUNG - A01 Core - IMEI(352898495018542)", "E": "VERMELHO", "F": ""},
+            {"A": "COMERCIAL", "B": "0106", "C": "SMARTPHONE", "D": "SAMSUNG - A01 Core - IMEI(352898495026016)", "E": "VERMELHO", "F": ""},
+            {"A": "COMERCIAL", "B": "0105", "C": "SMARTPHONE", "D": "SAMSUNG - A06 2024 - IMEI(353096467593019)", "E": "PRETO", "F": ""},
+            {"A": "COMERCIAL", "B": "0125", "C": "ROTEADOR", "D": "/", "E": "BRANCO", "F": ""},
+            {"A": "COPA", "B": "0104", "C": "MICROONDAS ", "D": "ELECTROLUX - ME23B/220V", "E": "BRANCO", "F": ""},
+            {"A": "COPA", "B": "0060", "C": "MICROONDAS ", "D": "ELECTROLUX - ME23B/220V", "E": "BRANCO", "F": ""},
+            {"A": "COPA", "B": "0061", "C": "GELADEIRA", "D": "CONSUL - CRB36ABBNA", "E": "BRANCO", "F": ""},
+            {"A": "COPA", "B": "0063", "C": "PURIFICADOR ", "D": "SOFT PLUS EVEREST", "E": "CINZA", "F": ""},
+            {"A": "COPA", "B": "0122", "C": "INTERFONE", "D": "INTELBRAS - IVR 4", "E": "BRANCO", "F": ""},
+            {"A": "ENTRADA", "B": "0124", "C": "MOTOR DO PORTÃO", "D": "PPA", "E": "CINZA", "F": ""},
+            {"A": "ESTOQUE", "B": "0021", "C": "CPU", "D": "HP", "E": "PRETO", "F": ""},
+            {"A": "ESTOQUE", "B": "0022", "C": "TELA", "D": "MGS", "E": "PRETO", "F": ""},
+            {"A": "ESTOQUE", "B": "0042", "C": "CPU", "D": "/", "E": "PRETO", "F": ""},
+            {"A": "ESTOQUE", "B": "0043", "C": "NOTEBOOK", "D": "LENOVO", "E": "PRETO", "F": ""},
+            {"A": "ESTOQUE", "B": "0040", "C": "CPU", "D": "/", "E": "PRETO", "F": ""},
+            {"A": "ESTOQUE", "B": "0117", "C": "NOTEBOOK", "D": "DELL - VOSTRO", "E": "PRETO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0025", "C": "MESA DE ESCRITÓRIO 2 GAVETAS", "D": "/", "E": "BRANCO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0026", "C": "CPU", "D": "C3TECH", "E": "PRETO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0027", "C": "TELA", "D": "AOC", "E": "PRETO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0029", "C": "TELA ", "D": "HAYOM", "E": "PRETO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0041", "C": "TELA", "D": "LENOVO - THINKVISION", "E": "PRETO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0030", "C": "CPU", "D": "C3TECH", "E": "PRETO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0031", "C": "GAVETEIRO", "D": "/", "E": "CINZA", "F": ""},
+            {"A": "FINANCEIRO", "B": "0032", "C": "IMPRESSORA", "D": "EPSON/L3250", "E": "PRETO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0033", "C": "TELA", "D": "ACER 27'", "E": "PRETO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0034", "C": "MESA DE ESCRITÓRIO 2 MÓDULOS", "D": "/", "E": "CINZA ESCURO/CINZA", "F": ""},
+            {"A": "FINANCEIRO", "B": "0036", "C": "MESA DE ESCRITÓRIO 2 GAVETAS", "D": "/", "E": "BRANCO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0085", "C": "CADEIRA DE ESCRITÓRIO", "D": "AVANTTI", "E": "PRETO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0086", "C": "CADEIRA DE ESCRITÓRIO", "D": "AVANTTI", "E": "PRETO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0087", "C": "CADEIRA DE ESCRITÓRIO", "D": "AVANTTI", "E": "PRETO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0092", "C": "SMARTPHONE", "D": "SAMSUNG - A06 2024 - IMEI(353096468943064)", "E": "PRETO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0098", "C": "SMARTPHONE", "D": "SAMSUNG - A20S - IMEI(351840113434926)", "E": "PRETO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0099", "C": "SMARTPHONE", "D": "SAMSUNG - A01 Core - IMEI(352898494756316", "E": "PRETO", "F": ""},
+            {"A": "FINANCEIRO", "B": "0119", "C": "PERSIANA", "D": "EB LUX", "E": "BRANCO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0008", "C": "TELA", "D": "AOC", "E": "PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0009", "C": "MESA DE ESCRITÓRIO", "D": "/", "E": "CINZA/CINZA ESCURO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0012", "C": "TELA", "D": "ACER 27'", "E": "PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0019", "C": "TELA", "D": "ACER 23'", "E": "PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0020", "C": "CPU", "D": "AURA", "E": "PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0115", "C": "NOBREAK", "D": "SMS", "E": "PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0114", "C": "SWITCH", "D": "CISCO - 24 PORTAS 100MB", "E": "PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0113", "C": "SERVIDOR/CPU ", "D": "DELL - POWEREDGET320", "E": "PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0109", "C": "CABINE DO SERVIDOR", "D": "/", "E": "PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0111", "C": "AR-CONDICIONADO", "D": "PHILCO - INVERTER", "E": "BRANCO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0110", "C": "QUADRO MANDALA", "D": "/", "E": "PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0112", "C": "PERSIANA", "D": "EB LUX", "E": "BRANCA", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0116", "C": "DVR", "D": "HIKVISION", "E": "PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0108", "C": "CADEIRA DE ESCRITÓRIO", "D": "CADEIRA SEM BRAÇO AMÉRICA FER", "E": "PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0129", "C": "NOTEBOOK", "D": "ASUS - E1504FA - Nfe 003.273.736", "E": "PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0069", "C": "MESA DE CENTRO", "D": "/", "E": "BRANCO/PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0084", "C": "CADEIRA DE ESCRITÓRIO", "D": "AVANTTI", "E": "PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0088", "C": "NOTEBOOK", "D": "ASUS - E1504FA - Nfe 003.273.736", "E": "PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0107", "C": "CADEIRA DE ESCRITÓRIO", "D": "SEM MARCA/ENZO", "E": "PRETO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0126", "C": "NOTEBOOK", "D": "DELL", "E": "CINZA CLARO", "F": ""},
+            {"A": "HEAD/BKO/MKT", "B": "0028", "C": "TELA ", "D": "AOC", "E": "PRETO", "F": ""},
+            {"A": "PROCESSOS", "B": "0103", "C": "SMARTPHONE", "D": "SAMSUNG - A04e- IMEI(354188156559143)", "E": "PRETO", "F": ""},
+            {"A": "RECEPÇÃO", "B": "0053", "C": "CADEIRA DUPLA/2 LUGARES", "D": "/", "E": "PRETO", "F": ""},
+            {"A": "RECEPÇÃO", "B": "0054", "C": "MESA DE CENTRO RETANGULAR", "D": "/", "E": "PRETO", "F": ""},
+            {"A": "RECEPÇÃO", "B": "0055", "C": "POLTRONA", "D": "/", "E": "PRETO", "F": ""},
+            {"A": "RECEPÇÃO", "B": "0056", "C": "POLTRONA", "D": "/", "E": "PRETO", "F": ""},
+            {"A": "RECEPÇÃO", "B": "0057", "C": "SOFÁ 3 LUGARES", "D": "/", "E": "PRETO", "F": ""},
+            {"A": "RECEPÇÃO", "B": "0090", "C": "MARCADOR DE PONTO", "D": "DIXI  - MODELO EVO 4", "E": "PRETO", "F": ""},
+            {"A": "RECEPÇÃO", "B": "0123", "C": "ALARME DE SEGURANÇA", "D": "INTELBRAS", "E": "BRANCO/PRETO", "F": ""},
+            {"A": "RH", "B": "0002", "C": "ARMÁRIO 2 PORTAS", "D": "/", "E": "BRANCO", "F": ""},
+            {"A": "SALA DE REUNIÃO", "B": "0059", "C": "MESA GRANDE", "D": "/", "E": "BRANCO/CREME/MADEIRA", "F": ""},
+            {"A": "SALA DE REUNIÃO", "B": "0128", "C": "AR-CONDICIONADO", "D": "PHILCO - PAS9QT", "E": "BRANCO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0001", "C": "MESA REDONDA", "D": "/", "E": "CREME", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0003", "C": "ARMÁRIO 2 PORTAS", "D": "/", "E": "CREME/CINZA ESCURO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0005", "C": "CPU", "D": "C3TECH", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0006", "C": "TELA", "D": "HAYOM", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0007", "C": "ARMÁRIO 2 PORTAS C/ PRATELEIRA", "D": "/", "E": "CINZA/CINZA ESCURO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0010", "C": "TELA POSITIVO", "D": "/", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0013", "C": "TELA", "D": "HAYOM", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0014", "C": "CPU", "D": "/", "E": "CINZA/VERMELHO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0016", "C": "CPU", "D": "C3TECH", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0017", "C": "ESTABILIZADOR", "D": "/", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0018", "C": "TELA", "D": "LG", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0024", "C": "AR-CONDICIONADO", "D": "SPRINGER - 42MACA2255", "E": "BRANCA", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0041", "C": "TELA", "D": "LENOVO", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0071", "C": "NOTEBOOK", "D": "ASUS - RTL8821CE - Nfe 039.062.460", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0075", "C": "CADEIRA DE ESCRITÓRIO", "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0076", "C": "CADEIRA DE ESCRITÓRIO", "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0078", "C": "CADEIRA DE ESCRITÓRIO", "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0079", "C": "CADEIRA DE ESCRITÓRIO", "D": "CAVALETTI CAD FLIP LIGHT 43503 TL PRETA EP S/REG C/BR TEC", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0004", "C": "BAIA INDIVIDUAL", "D": "/", "E": "CREME/PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0015", "C": "ETIQUETADORA", "D": "ELGIN", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0023", "C": "MESA BAIA 4 LUGARES", "D": "/", "E": "BRANCA", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0050", "C": "ARMÁRIO 2 NICHOS", "D": "/", "E": "CINZA/CREME", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0035", "C": "AR-CONDICIONADO", "D": "MAXIFLEX - 42AFCE09X5", "E": "BRANCO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0045", "C": "TELA", "D": "AOC", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0044", "C": "CPU", "D": "C3TECH", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0039", "C": "TELA", "D": "SAMSUNG", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0047", "C": "TELA", "D": "LENOVO", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0100", "C": "SMARTPHONE", "D": "XIAOMI - REDMI 13C", "E": "AZUL", "F": ""},
+            {"A": "COMERCIAL", "B": "0102", "C": "SMARTPHONE", "D": "SAMSUNG - A20S - IMEI(351840113434710)", "E": "PRETO", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0118", "C": "PERSIANA", "D": "EB LUX", "E": "BRANCA", "F": ""},
+            {"A": "SAC/BKO/MKT", "B": "0121", "C": "INTERFONE", "D": "INTELBRAS - IVR 4", "E": "BRANCO", "F": ""},
+            {"A": "SALA CEO", "B": "0058", "C": "MESA DE CENTRO", "D": "/", "E": "BRANCA", "F": ""},
+            {"A": "SALA CEO", "B": "0065", "C": "CADEIRA DE ESCRITÓRIO", "D": "/", "E": "CINZA ESCURO", "F": ""},
+            {"A": "SALA CEO", "B": "0066", "C": "MESA DE ESCRITÓRIO EM L", "D": "/", "E": "CINZA ESCURO", "F": ""},
+            {"A": "SALA CEO", "B": "0067", "C": "POLTRONA PUFFER", "D": "/", "E": "CINZA CLARO", "F": ""},
+            {"A": "SALA CEO", "B": "0068", "C": "CADEIRA DE ESCRITÓRIO", "D": "/", "E": "CINZA ESCURO", "F": ""},
+            {"A": "SALA CEO", "B": "0070", "C": "POLTRONA PUFFER", "D": "/", "E": "CINZA CLARO", "F": ""},
+            {"A": "SALA CEO", "B": "0072", "C": "QUADRO BICILETA AZUL", "D": "/", "E": "PRETO", "F": ""},
+            {"A": "SALA CEO", "B": "0120", "C": "PERSIANA", "D": "EB LUX", "E": "BRANCO", "F": ""}
+        ];
 
+        const inventoryData = {};
+        rawData.forEach(row => {
+            if (row.A === "LOCAL" || row.B === "Nº") return;
+            const sector = row.A || "OUTROS";
+            if (!inventoryData[sector]) {
+                inventoryData[sector] = [];
+            }
+            inventoryData[sector].push({
+                id: row.B,
+                item: row.C,
+                modelo: row.D,
+                cor: row.E,
+                obs: row.F || "-"
+            });
+        });
 
-    const dadosFiltrados = dados.filter(d => d.A && d.A !== "LOCAL" && d.B !== "Nº");
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                themeIcon.setAttribute('data-lucide', 'moon');
+            } else {
+                html.classList.add('dark');
+                themeIcon.setAttribute('data-lucide', 'sun');
+            }
+            lucide.createIcons();
+        }
 
-    const tabela = document.getElementById("tabela");
-    const busca = document.getElementById("busca");
-    const tabs = document.getElementById("tabs");
+        function renderSectors() {
+            const grid = document.getElementById('sectors-grid');
+            grid.innerHTML = "";
 
-    const locais = [...new Set(dadosFiltrados.map(d => d.A))].sort();
+            Object.keys(inventoryData).sort().forEach(sector => {
+                const count = inventoryData[sector].length;
+                grid.innerHTML += `
+                    <div onclick="openArea('${sector}')" class="group p-6 bg-white/90 dark:bg-slate-900/85 border border-purple-200 dark:border-slate-800 rounded-2xl cursor-pointer hover:border-purple-500 hover:bg-white dark:hover:bg-slate-900 transition-all duration-300 hover:-translate-y-1 shadow-xl backdrop-blur-sm flex items-center justify-between">
+                        <div>
+                            <div class="w-10 h-10 bg-purple-600/10 text-purple-600 dark:text-orange-400 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <i data-lucide="folder-kanban" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-200">${sector}</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${count} item(ns) cadastrado(s)</p>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-slate-400 dark:text-slate-600 group-hover:text-purple-600 dark:group-hover:text-orange-400 transition-colors"></i>
+                    </div>
+                `;
+            });
+            lucide.createIcons();
+        }
 
-    function criarTabs() {
-      const tabTodos = document.createElement("div");
-      tabTodos.className = "tab active";
-      tabTodos.textContent = "Todos";
-      tabTodos.onclick = () => filtrarPorLocal("Todos");
-      tabs.appendChild(tabTodos);
+        function handleLogin(event) {
+            event.preventDefault();
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-msg');
 
-      locais.forEach(local => {
-        const tab = document.createElement("div");
-        tab.className = "tab";
-        tab.textContent = local;
-        tab.onclick = () => filtrarPorLocal(local);
-        tabs.appendChild(tab);
-      });
-    }
+            if (password === "wick@admin") {
+                errorMsg.classList.add('hidden');
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('dashboard-screen').classList.remove('hidden');
+                renderSectors();
+            } else {
+                errorMsg.classList.remove('hidden');
+            }
+        }
 
-    function renderTabela(lista) {
-      tabela.innerHTML = "";
-      lista.forEach(item => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${item.A}</td>
-          <td>${item.B}</td>
-          <td>${item.C}</td>
-          <td>${item.D}</td>
-          <td>${item.E}</td>
-        `;
-        tabela.appendChild(tr);
-      });
-    }
+        function openArea(areaName) {
+            document.getElementById('dashboard-screen').classList.add('hidden');
+            document.getElementById('list-screen').classList.remove('hidden');
+            
+            document.getElementById('list-title').innerText = "Setor: " + areaName;
 
-    function filtrarPorLocal(local) {
-      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-      event.target.classList.add("active");
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = ""; 
 
-      const lista = local === "Todos"
-        ? dadosFiltrados
-        : dadosFiltrados.filter(d => d.A === local);
+            const items = inventoryData[areaName] || [];
+            
+            items.forEach(item => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-purple-50/50 dark:hover:bg-slate-800/40 transition">
+                        <td class="py-3 px-4 font-mono text-xs text-purple-600 dark:text-orange-400 font-bold">#${item.id}</td>
+                        <td class="py-3 px-4 font-medium text-slate-800 dark:text-slate-200">${item.item}</td>
+                        <td class="py-3 px-4 text-slate-500 dark:text-slate-400 text-xs">${item.modelo}</td>
+                        <td class="py-3 px-4 text-slate-500 dark:text-slate-400 text-xs">${item.cor}</td>
+                        <td class="py-3 px-4 text-slate-400 dark:text-slate-500 text-xs">${item.obs}</td>
+                    </tr>
+                `;
+            });
 
-      renderTabela(lista);
-    }
+            lucide.createIcons();
+        }
 
-    busca.addEventListener("input", () => {
-      const termo = busca.value.toLowerCase();
-      const linhas = tabela.querySelectorAll("tr");
+        function goBackToDashboard() {
+            document.getElementById('list-screen').classList.add('hidden');
+            document.getElementById('dashboard-screen').classList.remove('hidden');
+        }
 
-      linhas.forEach(linha => {
-        linha.style.display = linha.textContent.toLowerCase().includes(termo)
-          ? ""
-          : "none";
-      });
-    });
-
-    criarTabs();
-    renderTabela(dadosFiltrados);
-  </script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
