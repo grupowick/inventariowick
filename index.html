@@ -55,30 +55,19 @@
             <h2 class="text-3xl font-bold tracking-tight">Setores do Inventário</h2>
             <p class="text-slate-700 dark:text-slate-300 mt-1">Selecione o setor que deseja consultar</p>
 
-            <!-- Busca Geral -->
-            <div class="relative max-w-2xl mx-auto mt-5 text-left">
-                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-500 pointer-events-none"></i>
-                <input
-                    type="search"
-                    id="global-search"
-                    oninput="searchInventory(this.value)"
-                    placeholder="Buscar por setor, tombo, item, marca, modelo ou cor..."
-                    autocomplete="off"
-                    class="w-full pl-12 pr-12 py-3.5 bg-white/90 dark:bg-slate-900/85 border border-purple-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-600 shadow-lg backdrop-blur-sm transition"
-                >
-                <button
-                    type="button"
-                    id="clear-search"
-                    onclick="clearSearch()"
-                    class="hidden absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-purple-50 dark:hover:bg-slate-800 transition cursor-pointer"
-                    title="Limpar busca">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-
-                <!-- Resultados da busca -->
-                <div id="search-results"
-                    class="hidden absolute z-50 left-0 right-0 top-full mt-2 max-h-80 overflow-y-auto bg-white/95 dark:bg-slate-900/95 border border-purple-200 dark:border-slate-800 rounded-xl shadow-2xl backdrop-blur-md">
+            <!-- Busca geral -->
+            <div class="max-w-2xl mx-auto mt-6">
+                <div class="relative">
+                    <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none"></i>
+                    <input
+                        type="search"
+                        id="global-search"
+                        placeholder="Buscar no inventário..."
+                        oninput="globalSearch(this.value)"
+                        class="w-full pl-12 pr-4 py-3.5 bg-white/90 dark:bg-slate-900/85 border border-purple-200 dark:border-slate-800 rounded-xl shadow-lg backdrop-blur-sm focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 transition"
+                    >
                 </div>
+                <div id="search-results" class="hidden mt-3 text-left"></div>
             </div>
         </div>
 
@@ -316,6 +305,60 @@
             }
         }
 
+        function globalSearch(query) {
+            const resultsContainer = document.getElementById('search-results');
+            const search = query.trim().toLowerCase();
+
+            if (!search) {
+                resultsContainer.classList.add('hidden');
+                resultsContainer.innerHTML = '';
+                return;
+            }
+
+            const results = [];
+
+            Object.keys(inventoryData).forEach(sector => {
+                inventoryData[sector].forEach(item => {
+                    const searchable = [
+                        sector, item.id, item.item, item.modelo, item.cor, item.obs
+                    ].join(' ').toLowerCase();
+
+                    if (searchable.includes(search)) {
+                        results.push({ sector, item });
+                    }
+                });
+            });
+
+            resultsContainer.classList.remove('hidden');
+
+            if (results.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="p-4 bg-white/90 dark:bg-slate-900/90 border border-purple-200 dark:border-slate-800 rounded-xl shadow-lg backdrop-blur-sm text-center text-sm text-slate-500 dark:text-slate-400">
+                        Nenhum item encontrado.
+                    </div>
+                `;
+                return;
+            }
+
+            resultsContainer.innerHTML = `
+                <div class="max-h-80 overflow-y-auto bg-white/95 dark:bg-slate-900/95 border border-purple-200 dark:border-slate-800 rounded-xl shadow-2xl backdrop-blur-md divide-y divide-purple-100 dark:divide-slate-800">
+                    ${results.map(({sector, item}) => `
+                        <button type="button" onclick="openArea('${sector.replace(/'/g, "\\'")}'); document.getElementById('global-search').value=''; document.getElementById('search-results').classList.add('hidden');" class="w-full text-left p-4 hover:bg-purple-50 dark:hover:bg-slate-800/70 transition cursor-pointer">
+                            <div class="flex items-center justify-between gap-4">
+                                <div class="min-w-0">
+                                    <div class="font-semibold text-slate-800 dark:text-slate-200">${item.item}</div>
+                                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">#${item.id} · ${sector} · ${item.modelo}</div>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-4 h-4 shrink-0 text-slate-400"></i>
+                            </div>
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+
+            lucide.createIcons();
+        }
+
         function openArea(areaName) {
             document.getElementById('dashboard-screen').classList.add('hidden');
             document.getElementById('list-screen').classList.remove('hidden');
@@ -345,94 +388,6 @@
         function goBackToDashboard() {
             document.getElementById('list-screen').classList.add('hidden');
             document.getElementById('dashboard-screen').classList.remove('hidden');
-        }
-
-        function normalizeSearchText(text) {
-            return String(text || "")
-                .normalize("NFD")
-                .replace(/[\\u0300-\\u036f]/g, "")
-                .toLowerCase()
-                .trim();
-        }
-
-        function searchInventory(query) {
-            const resultsBox = document.getElementById('search-results');
-            const clearButton = document.getElementById('clear-search');
-            const normalizedQuery = normalizeSearchText(query);
-
-            if (!normalizedQuery) {
-                resultsBox.classList.add('hidden');
-                resultsBox.innerHTML = "";
-                clearButton.classList.add('hidden');
-                lucide.createIcons();
-                return;
-            }
-
-            clearButton.classList.remove('hidden');
-
-            const results = [];
-
-            Object.keys(inventoryData).forEach(sector => {
-                inventoryData[sector].forEach(item => {
-                    const searchableText = normalizeSearchText(
-                        `${sector} ${item.id} ${item.item} ${item.modelo} ${item.cor} ${item.obs}`
-                    );
-
-                    if (searchableText.includes(normalizedQuery)) {
-                        results.push({ sector, item });
-                    }
-                });
-            });
-
-            if (results.length === 0) {
-                resultsBox.innerHTML = `
-                    <div class="p-5 text-center">
-                        <i data-lucide="search-x" class="w-7 h-7 mx-auto mb-2 text-slate-400"></i>
-                        <p class="text-sm font-medium text-slate-700 dark:text-slate-300">Nenhum item encontrado</p>
-                        <p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Tente outro termo de busca.</p>
-                    </div>
-                `;
-            } else {
-                resultsBox.innerHTML = results.map(({ sector, item }) => `
-                    <button type="button"
-                        onclick="openSearchResult('${sector.replace(/'/g, "\\'")}', '${item.id}')"
-                        class="w-full text-left px-4 py-3 border-b border-purple-50 dark:border-slate-800 last:border-b-0 hover:bg-purple-50 dark:hover:bg-slate-800/70 transition cursor-pointer">
-                        <div class="flex items-center justify-between gap-3">
-                            <div class="min-w-0">
-                                <p class="font-semibold text-sm text-slate-800 dark:text-slate-200 truncate">${item.item}</p>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
-                                    ${sector} · #${item.id} · ${item.modelo}
-                                </p>
-                            </div>
-                            <i data-lucide="chevron-right" class="w-4 h-4 shrink-0 text-slate-400"></i>
-                        </div>
-                    </button>
-                `).join('');
-            }
-
-            resultsBox.classList.remove('hidden');
-            lucide.createIcons();
-        }
-
-        function openSearchResult(sector, itemId) {
-            openArea(sector);
-
-            const searchInput = document.getElementById('global-search');
-            const resultsBox = document.getElementById('search-results');
-
-            if (searchInput) searchInput.value = "";
-            resultsBox.classList.add('hidden');
-            resultsBox.innerHTML = "";
-            document.getElementById('clear-search').classList.add('hidden');
-
-            lucide.createIcons();
-        }
-
-        function clearSearch() {
-            const searchInput = document.getElementById('global-search');
-            searchInput.value = "";
-            searchInventory("");
-            searchInput.focus();
         }
 
         lucide.createIcons();
