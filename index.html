@@ -306,9 +306,13 @@
             }
         }
 
+        function normalizarTexto(texto) {
+            return String(texto || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+        }
+
         function globalSearch(query) {
             const resultsContainer = document.getElementById('search-results');
-            const search = query.trim().toLowerCase();
+            const search = normalizarTexto(query);
 
             if (!search) {
                 resultsContainer.classList.add('hidden');
@@ -320,11 +324,11 @@
 
             Object.keys(inventoryData).forEach(sector => {
                 inventoryData[sector].forEach(item => {
-                    const searchable = [
-                        sector, item.id, item.item, item.modelo, item.cor, item.obs
-                    ].join(' ').toLowerCase();
+                    // Pesquisa SOMENTE pelo nome do item ou pelo código/tombo.
+                    const nomeItem = normalizarTexto(item.item);
+                    const codigo = normalizarTexto(item.id);
 
-                    if (searchable.includes(search)) {
+                    if (nomeItem.includes(search) || codigo.includes(search)) {
                         results.push({ sector, item });
                     }
                 });
@@ -334,8 +338,8 @@
 
             if (results.length === 0) {
                 resultsContainer.innerHTML = `
-                    <div class="p-4 bg-white/90 dark:bg-slate-900/90 border border-purple-200 dark:border-slate-800 rounded-xl shadow-lg backdrop-blur-sm text-center text-sm text-slate-500 dark:text-slate-400">
-                        Nenhum item encontrado.
+                    <div class="p-4 bg-white/90 dark:bg-slate-900/90 border border-purple-200 dark:border-slate-800 rounded-xl shadow-lg text-center text-sm text-slate-500 dark:text-slate-400">
+                        Nenhum item encontrado para <strong>${query}</strong>.
                     </div>
                 `;
                 return;
@@ -344,11 +348,11 @@
             resultsContainer.innerHTML = `
                 <div class="max-h-80 overflow-y-auto bg-white/95 dark:bg-slate-900/95 border border-purple-200 dark:border-slate-800 rounded-xl shadow-2xl backdrop-blur-md divide-y divide-purple-100 dark:divide-slate-800">
                     ${results.map(({sector, item}) => `
-                        <button type="button" onclick="openArea('${sector.replace(/'/g, "\\'")}'); document.getElementById('global-search').value=''; document.getElementById('search-results').classList.add('hidden');" class="w-full text-left p-4 hover:bg-purple-50 dark:hover:bg-slate-800/70 transition cursor-pointer">
+                        <button type="button" onclick="openArea('${sector.replace(/'/g, "\\'")}'); limparBusca();" class="w-full text-left p-4 hover:bg-purple-50 dark:hover:bg-slate-800/70 transition cursor-pointer">
                             <div class="flex items-center justify-between gap-4">
                                 <div class="min-w-0">
                                     <div class="font-semibold text-slate-800 dark:text-slate-200">${item.item}</div>
-                                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">#${item.id} · ${sector} · ${item.modelo}</div>
+                                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">Código: #${item.id} · Setor: ${sector}</div>
                                 </div>
                                 <i data-lucide="chevron-right" class="w-4 h-4 shrink-0 text-slate-400"></i>
                             </div>
@@ -358,6 +362,16 @@
             `;
 
             lucide.createIcons();
+        }
+
+        function limparBusca() {
+            const input = document.getElementById('global-search');
+            const results = document.getElementById('search-results');
+            if (input) input.value = '';
+            if (results) {
+                results.classList.add('hidden');
+                results.innerHTML = '';
+            }
         }
 
         function openArea(areaName) {
